@@ -5,7 +5,7 @@ import { NodeFetchWithRetry } from "@pnp/nodejs";
 import { SPDefault } from "@pnp/nodejs/index.js";
 import { DefaultParse, InjectHeaders, Queryable } from "@pnp/queryable";
 import { SPFI, spfi } from "@pnp/sp";
-import { AccessToken, AzureCliCredential, AzureDeveloperCliCredential, DefaultAzureCredential, ManagedIdentityCredential, ManagedIdentityCredentialClientIdOptions } from "@azure/identity";
+import { AccessToken, AzureCliCredential, AzureDeveloperCliCredential, ClientCertificateCredential, ClientCertificatePEMCertificate, DefaultAzureCredential, ManagedIdentityCredential, ManagedIdentityCredentialClientIdOptions } from "@azure/identity";
 import { AzureIdentity, ValidCredential } from "@pnp/azidjsclient";
 import { DefaultHeaders } from "@pnp/sp";
 import { CommonConfig } from "./common.js";
@@ -147,6 +147,14 @@ function withAzureDeveloperCliCredential(): ValidCredential {
   // As you can see in this example, the AzureDeveloperCliCredential does not take any parameters,
   // instead relying on the Azure Developer CLI authenticated user to authenticate.
   const credential = new AzureDeveloperCliCredential();
+  return credential;
+}
+
+function withClientCertificateCredential(tenantId: string, clientId: string, configuration: ClientCertificatePEMCertificate): ValidCredential {
+  // https://learn.microsoft.com/en-us/javascript/api/@azure/identity/clientcertificatecredential?view=azure-node-latest
+  // https://learn.microsoft.com/en-us/azure/key-vault/certificates/quick-create-node?tabs=linux&pivots=programming-language-javascript
+  // https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/keyvault/keyvault-certificates/README.md
+  const credential = new ClientCertificateCredential(tenantId, clientId, configuration);
   return credential;
 }
 
